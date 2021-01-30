@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
-    public Sprite[] leftRun, rightRun;
+    public Sprite[] leftRun, rightRun, forwardRun;
 
     Vector3 moveDiff;
     int currentSprite = 0;
@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
+            MovePlayer(ref forwardRun);
             moveDiff.y+= 1;
         }
         if (Input.GetKey(KeyCode.S))

@@ -21,8 +21,9 @@ public class PlayerAttributes : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("Coolision");
         Eatable obj;
-        if (tryToEat && (obj = collision.collider.gameObject.GetComponent<Eatable>()) != null)
+        if (tryToEat && (obj = collision.gameObject.GetComponent<Eatable>()) != null)
         {
             Health += obj.attribute[(int)Attribute.HEALTH];
             Mana += obj.attribute[(int)Attribute.MANA];

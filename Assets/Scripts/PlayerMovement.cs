@@ -5,39 +5,74 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
-    public float jumpForce;
+    public Sprite[] leftRun, rightRun;
 
-    Rigidbody2D player;
-    bool isGround = true;
-    Vector3 moveDiff;        // movement difference
-    Vector3 oldMoveDiff;
+    Vector3 moveDiff;
+    int currentSprite = 0;
+    SpriteRenderer spriteRenderer;
+    bool walksOnLeftFoot = true;
 
     void Start()
     {
-        player = gameObject.GetComponent<Rigidbody2D>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        moveDiff = new Vector2(0f, 0f);
+        moveDiff = new Vector3(0f, 0f, 0f);
 
         if (Input.GetKey(KeyCode.W))
         {
-            moveDiff.x += 1;
+            moveDiff.y+= 1;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            moveDiff.x -= 1;
+            moveDiff.y -= 1;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            moveDiff.y += 1;
+            MovePlayer(ref leftRun);
+            moveDiff.x -= 1;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            moveDiff.y -= 1;
+            MovePlayer(ref rightRun);
+            moveDiff.x += 1;
         }
 
-        transform.position += moveDiff;                           // Перемещение игрока на расчитанное расстояние
+        moveDiff.Normalize();                                  
+        moveDiff = moveDiff * moveSpeed * Time.deltaTime;
+        transform.position += moveDiff;                      
+    }
+
+    IEnumerator ChangeSprite(Sprite sprite)
+    {
+        spriteRenderer.sprite = sprite;
+        yield return new WaitForSeconds(0.01f);
+    }
+
+    void MovePlayer(ref Sprite[] move)
+    {
+        StartCoroutine(ChangeSprite(move[currentSprite]));
+
+        if (walksOnLeftFoot)
+        {
+            currentSprite += 1;
+        }
+        else
+        {
+            currentSprite = 3;
+        }
+
+        if (currentSprite == 3)
+        {
+            currentSprite = 0;
+            walksOnLeftFoot = true;
+        }
+        else if (currentSprite == 2 && walksOnLeftFoot)
+        {
+            currentSprite = 0;
+            walksOnLeftFoot = false;
+        }
     }
 }

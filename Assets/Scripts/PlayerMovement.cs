@@ -10,11 +10,13 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDiff;
     int currentSprite = 0;
     SpriteRenderer spriteRenderer;
+    Bounds mapRectangle;
     bool walksOnLeftFoot = true;
 
     void Start()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer = Connector.player.GetComponent<SpriteRenderer>();
+        mapRectangle = Connector.map.GetComponent<SpriteRenderer>().bounds;
     }
 
     void Update()
@@ -42,6 +44,13 @@ public class PlayerMovement : MonoBehaviour
 
         moveDiff.Normalize();                                  
         moveDiff = moveDiff * moveSpeed * Time.deltaTime;
+
+        var y = transform.position.y + moveDiff.y;
+
+        if (y >= mapRectangle.max.y - 135 / 100.0 || y <= mapRectangle.min.y + 170 / 100.0) 
+        { 
+            return; 
+        }
         transform.position += moveDiff;                      
     }
 

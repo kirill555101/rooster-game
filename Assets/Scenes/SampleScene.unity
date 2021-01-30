@@ -674,7 +674,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  jumpForce: 0
+  leftRun:
+  - {fileID: 21300000, guid: b24175d4ae78dd84fa3b780c5a62ba9d, type: 3}
+  - {fileID: 21300000, guid: 2a2b6c5eaed60a04581e384da646c264, type: 3}
+  - {fileID: 21300000, guid: 8cc383a42f784fa438cfc1519d40726d, type: 3}
+  rightRun:
+  - {fileID: 21300000, guid: 556071ba8581f1d4d9a599532d451cd5, type: 3}
+  - {fileID: 21300000, guid: 2a2b6c5eaed60a04581e384da646c264, type: 3}
+  - {fileID: 21300000, guid: c81a712cb78b83d42b9743ccbe6d6018, type: 3}
 --- !u!212 &1663181435
 SpriteRenderer:
   m_ObjectHideFlags: 0

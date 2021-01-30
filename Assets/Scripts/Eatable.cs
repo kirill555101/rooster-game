@@ -8,7 +8,9 @@ public class Eatable : MonoBehaviour
 
     public void Eat()
     {
+        Debug.Log("Eatable Eat");
         Destroy(gameObject);
+        GetComponent<SpriteRenderer>().enabled = false;
     }
 }
 

@@ -5,16 +5,17 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
-    public Sprite[] leftRun, rightRun, forwardRun;
+    public Sprite[] leftRun, rightRun, forwardRun, backwardRun;
 
     Vector3 moveDiff;
-    int currentSprite = 0;
+    int currentFrame = 0;
     SpriteRenderer spriteRenderer;
     Bounds mapRectangle;
-    bool walksOnLeftFoot = true;
-
+    int[] currentFramess;
+    bool hasStartedCorountine = false;
     void Start()
     {
+        currentFramess = new int[4] { 0, 1, 0, 2 };
         spriteRenderer = Connector.player.GetComponent<SpriteRenderer>();
         mapRectangle = Connector.map.GetComponent<SpriteRenderer>().bounds;
     }
@@ -25,21 +26,26 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            MovePlayer(ref forwardRun);
+            if (!hasStartedCorountine)
+                StartCoroutine(ChangeSprite(forwardRun[currentFramess[currentFrame]]));
             moveDiff.y+= 1;
         }
         if (Input.GetKey(KeyCode.S))
         {
+            if (!hasStartedCorountine)
+                StartCoroutine(ChangeSprite(backwardRun[currentFramess[currentFrame]]));
             moveDiff.y -= 1;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            MovePlayer(ref leftRun);
+            if (!hasStartedCorountine)
+                StartCoroutine(ChangeSprite(leftRun[currentFramess[currentFrame]]));
             moveDiff.x -= 1;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            MovePlayer(ref rightRun);
+            if (!hasStartedCorountine)
+                StartCoroutine(ChangeSprite(rightRun[currentFramess[currentFrame]]));
             moveDiff.x += 1;
         }
 
@@ -58,31 +64,13 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator ChangeSprite(Sprite sprite)
     {
         spriteRenderer.sprite = sprite;
-        yield return new WaitForSeconds(0.01f);
-    }
-
-    void MovePlayer(ref Sprite[] move)
-    {
-        StartCoroutine(ChangeSprite(move[currentSprite]));
-
-        if (walksOnLeftFoot)
+        hasStartedCorountine = true;
+        yield return new WaitForSeconds(0.1f);
+        currentFrame++;
+        if (currentFrame > 3)
         {
-            currentSprite += 1;
+            currentFrame = 0;
         }
-        else
-        {
-            currentSprite = 3;
-        }
-
-        if (currentSprite == 3)
-        {
-            currentSprite = 0;
-            walksOnLeftFoot = true;
-        }
-        else if (currentSprite == 2 && walksOnLeftFoot)
-        {
-            currentSprite = 0;
-            walksOnLeftFoot = false;
-        }
+        hasStartedCorountine = false;
     }
 }

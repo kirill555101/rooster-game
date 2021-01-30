@@ -11,23 +11,34 @@ public class PlayerAttributes : MonoBehaviour
     public float maxMana;
     bool tryToEat;
 
+    private void Awake()
+    {
+        attribute = new float[2] { maxHealth, 0f };
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("Mouse 0");
             TryToEat();
         }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
         Debug.Log("Coolision");
         Eatable obj;
-        if (tryToEat && (obj = collision.gameObject.GetComponent<Eatable>()) != null)
+        Debug.Log(collider.GetComponent<Eatable>() == null);
+
+        if (tryToEat && (obj = collider.GetComponent<Eatable>()) != null)
         {
+            Debug.Log("EEEEE");
             Health += obj.attribute[(int)Attribute.HEALTH];
             Mana += obj.attribute[(int)Attribute.MANA];
             tryToEat = false;
+            checkField.enabled = false;
+            obj.Eat();
         }
     }
 
@@ -58,6 +69,7 @@ public class PlayerAttributes : MonoBehaviour
     public void TryToEat()
     {
         tryToEat = true;
+        checkField.enabled = true;
         StopAllCoroutines();
         StartCoroutine(NoFoodDelay());
     }
@@ -66,5 +78,6 @@ public class PlayerAttributes : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         tryToEat = false;
+        checkField.enabled = false;
     }
 }

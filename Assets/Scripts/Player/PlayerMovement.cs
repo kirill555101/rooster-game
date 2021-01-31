@@ -54,10 +54,10 @@ public class PlayerMovement : MonoBehaviour
 
         var y = transform.position.y + moveDiff.y;
 
-        if (y >= mapRectangle.max.y - 135 / 100.0 || y <= mapRectangle.min.y + 200 / 100.0) 
-        { 
-            return; 
-        }
+        //if (y >= mapRectangle.max.y - 135 / 100.0 || y <= mapRectangle.min.y + 200 / 100.0) 
+        //{ 
+        //    return; 
+        //}
         transform.position += moveDiff;                      
     }
 
